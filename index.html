@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<!--
+	Interphase by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Lettuce Classification</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-xlarge.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+		<style>
+		div.img {
+		    margin: 10px;
+		    padding: 10px;
+		    height: auto;
+		    width: auto;
+		    float: left;
+		    text-align: center;
+		}
+
+		div.img img {
+		    display: inline;
+		    margin: 5px;
+		    border: 1px solid #ffffff;
+		}
+
+		div.img a:hover img {
+		    border:1px solid #0000ff;
+		}
+
+		div.desc {
+		    text-align: center;
+		    font-weight: normal;
+		    width: 120px;
+		    margin: 5px;
+		}
+		#drop_zone{
+			margin: 10px;
+		    	padding: 10px;
+			width:auto;
+			height:100px;
+			background-color:rgba(221,214,155,0.4);
+			border:1px dashed black;
+			text-align:center;
+			float: center;
+		}
+		#op{
+		  width:300px;
+		  height:300px;
+		  overflow:auto;
+		  background-color:rgba(221,214,221,0.3);
+		  border:1px dashed black;
+		}
+		 .thumb {
+		    height: 75px;
+		    border: 1px solid #000;
+		    margin: 10px 5px 0 0;
+		  }
+		</style>
+	</head>
+	<body class="landing">
+	
+
+		<!-- Header -->
+			<header id="header">
+				<h1><a href="index.html">DeepFarm</a></h1>
+				<nav id="nav">
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="generic.html">Generic</a></li>
+						<li><a href="elements.html">Elements</a></li>
+					</ul>
+				</nav>
+			</header>
+
+		<!-- Banner -->
+			<section id="banner">
+				<h2>Lettuce Classification</h2>
+				<p>Get your lettuce head images classified here for free!</p>
+			</section>
+
+		<!-- One -->
+			<section id="demo" class="wrapper style1 align-center">
+				<div class="container">
+					<header>
+						<h3 style="color:#FBA;">A Deep Convolutional Neural Network Architecture for Robust Classification of Lettuce Images</h3>
+						<p style="margin:0 0 0.2em 0;">Upload an image of a lettuce head or click on one of the example images in the gallery below.  The image will be classified into one of the following classes:</p>
+					<div id="legend">
+						<div class="img">
+						  <a target="_blank" href="klematis_big.htm">
+						    <img src="images/ripe.jpg" width="120" height="100">
+						  </a>
+						  <div class="desc">Ripe</div>
+						</div>
+						<div class="img">
+						  <a target="_blank" href="klematis2_big.htm">
+						    <img src="images/infected.jpg" width="120" height="100">
+						  </a>
+						  <div class="desc">Infected</div>
+						</div>
+						<div class="img">
+						  <a target="_blank" href="klematis3_big.htm">
+						   <img src="images/toosmall.jpg" width="120" height="100">
+						  </a>
+						  <div class="desc">Too small</div>
+						</div>
+						<div class="img">
+						  <a target="_blank" href="klematis4_big.htm">
+						    <img src="images/misshapen.jpg" width="120" height="100">
+						  </a>
+						  <div class="desc">Misshapen</div>
+						</div>
+						<div class="img">
+						  <a target="_blank" href="klematis4_big.htm">
+						     <img src="images/missinghead.jpg" width="120" height="100">
+						  </a>
+						  <div class="desc">Head Missing</div>
+						</div>
+					</div>
+
+
+					</header>
+
+					<br/><br/>
+					<div class="input_image_container" id="input_image_container">
+						<div class="image_upload_div" id="image_upload_div">
+							<form action="file:///home/viorik/workspace/UROP/website%20/index.html#demo" method="POST" enctype="multipart/form-data">
+								<input type="file"  id = "files" name = "files[]" onchange="viewImage()" multiple />
+<br/>
+								<output id="list"></output>
+								<br/> <br/> <br/>
+								<input class="btn-block btn-lg" type="submit" name="submit" id = "uploadButton" value="Upload for Processing" onclick="show_loading_form()"/>
+							</form>
+						</div>
+
+					<div id="drop_zone">Drop files here</div>
+					<output id="list2"></output>
+					
+<script type="text/javascript">
+
+
+ function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // Loop through the FileList and render image files as thumbnails.
+    for (var i = 0, f; f = files[i]; i++) {
+
+      // Only process image files.
+      if (!f.type.match('image.*')) {
+        continue;
+      }
+
+      var reader = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          // Render thumbnail.
+          var span = document.createElement('span');
+          span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                            '" title="', escape(theFile.name), '"/>'].join('');
+          document.getElementById('list').insertBefore(span, null);
+        };
+      })(f);
+
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(f);
+    }
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+/*
+function handleFileSelect(evt) {
+
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    var files = evt.dataTransfer.files; // FileList object.
+
+    // files is a FileList of File objects. List some properties.
+    var output = [];
+    for (var i = 0, f; f = files[i]; i++) {
+      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                  f.size, ' bytes, last modified: ',
+                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                  '</li>');
+    }
+    document.getElementById('list2').innerHTML = '<ul>' + output.join('') + '</ul>';
+  }
+
+  function handleDragOver(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+  }
+
+  // Setup the dnd listeners.
+  var dropZone = document.getElementById('drop_zone');
+  dropZone.addEventListener('dragover', handleDragOver, false);
+  dropZone.addEventListener('drop', handleFileSelect, false);
+
+
+function viewImage(evt){
+	var file = document.getElementById("file1");
+	if (file) {
+		//getAsText(file);
+		alert("Name: " + file.name + "\n" + "Last Modified Date :" + file.lastModifiedDate);
+	    }
+}
+
+/*function startReadFromDrag(evt) {
+    var file = evt.dataTransfer.files[0];
+    if (file) {
+          getAsText(file);
+        var fileAttr = "Name: " + file.name + "\n" + "Last Modified Date :" + file.lastModifiedDate;
+        $("#draghere").text(fileAttr);
+        alert(fileAttr);
+
+    }
+    evt.stopPropagation();
+    evt.preventDefault();
+}
+
+var dropingDiv = document.getElementById("draghere");
+dropingDiv.addEventListener("dragover", domagic, false);
+dropingDiv.addEventListener("drop", startReadFromDrag, false);
+
+
+function getAsText(readFile) {
+    var reader = new FileReader();
+    reader.readAsText(readFile, "UTF-8″);
+    reader.onload = loaded;
+}
+function loaded(evt) {
+    alert("File Loaded Successfully");
+    var fileString = evt.target.result;
+    $("#op").text(fileString);
+}
+*/
+
+</script>
+
+
+  						<div class="image_display_div" id="image_display_div">
+					   		<form action="file:///home/viorik/workspace/UROP/website%20/index.html#demo" method="POST" enctype="multipart/form-data">
+								<input class="btn-block btn-lg" type="submit" name="restart" id = "uploadButton" value="Try another image?" onclick="show_loading_form()" />
+							</form>
+						</div>
+
+
+
+					</div>
+
+<div class="row">
+					<section class="feature 6u 12u(small)">
+						<!-- Input Image Panel --> 
+						<div class="input_image_container" id="input_image_container">
+						   <div class="image_display_div" id="image_display_div">
+							   <form action="file:///home/viorik/workspace/UROP/website%20/index.html#demo" method="POST" enctype="multipart/form-data">
+									<img id = "display_image" style="width:100%; height:auto;"/>
+								</form>
+							</div>
+						   
+						   
+						   
+							<script type="text/javascript"> show_upload_form(); </script>							
+						</div>
+					</section>
+					<section class="feature 6u 12u(small)">
+						<img id = "result_image" style="width:100%; height:auto;"/>
+					</section>
+				</row>
+		
+			
+				<br/>
+			</div>
+				
+
+				</div>
+			</section>
+
+
+
+
+
+<script type='text/javascript'>
+		$(function(){
+			//Maps your button click event to the File Upload click event
+			$("#chooseImageMessage").click(function () {
+				 $("#file1").trigger('click');
+			});
+		});
+		
+		// ---------------------------------------------------------------------
+			// DISPLAYING NEW OUTPUT
+			function displayNewOutput(flag)
+			{
+				//var temp1 = document.getElementById("progressDiv"); 
+				//temp1.style.visibility="hidden"; 
+				
+				// Make all the images in the bottom panel deselected 
+				for (i = 1; i <=10; i++)
+				{
+					strId = "example_image_" + i.toString(); 
+					document.getElementById(strId).style.opacity = 1; 
+				}
+			
+			}
+		
+	</script>
+ <script type="text/javascript">
+		function alertFilename(input)
+		{
+			var thefile = document.getElementById('file1');
+			var str = thefile.value; 
+			getAsImage(thefile);
+			alert(str);
+			var n = str.lastIndexOf("/");
+			if (n == -1)
+			{
+				 n = str.lastIndexOf("\\");
+			}
+			var l = str.length; 
+			var imgname = str.substring(n+1, l);
+
+			// Display in the clickable Span 
+			var s = document.getElementById("chooseImageMessage"); 
+			if (imgname.length >= 30)
+			{
+				s.innerHTML = imgname.substring(0,27); 
+			}
+			else
+			{
+				s.innerHTML = imgname.substring(0,29); 
+			}
+			
+			if (imgname.length == 0)
+			{
+				s.innerHTML = 'Click to Choose Image'; 
+			}
+		}
+		
+    </script>
+
+		<!-- Two -->
+			<section id="two" class="wrapper style2 align-center">
+				<div class="container">
+					<header>
+						<h2>Lorem ipsum dolor sit</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio, autem.</p>
+					</header>
+					<div class="row">
+						<section class="feature 6u 12u$(small)">
+							<img class="image fit" src="images/pic01.jpg" alt="" />
+							<h3 class="title">Lorem ipsum dolor</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore ipsa voluptate, quae quibusdam. Doloremque similique, reiciendis sit quibusdam aperiam? Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+						</section>
+						<section class="feature 6u$ 12u$(small)">
+							<img class="image fit" src="images/pic02.jpg" alt="" />
+							<h3 class="title">Esse, fugiat, in</h3>
+							<p>Natus perspiciatis fugit illum porro iusto fuga nam voluptas minima voluptates deserunt, veniam reiciendis harum repellat necessitatibus. Animi, adipisci qui. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+						</section>
+						<section class="feature 6u 12u$(small)">
+							<img class="image fit" src="images/pic03.jpg" alt="" />
+							<h3 class="title">Voluptates, repudiandae, dolor</h3>
+							<p>Voluptatibus repellendus tempora, quia! Consequuntur atque, rerum quis, ullam labore officiis ipsa beatae dolore, assumenda eos harum repudiandae, qui ab! Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+						</section>
+						<section class="feature 6u$ 12u$(small)">
+							<img class="image fit" src="images/pic04.jpg" alt="" />
+							<h3 class="title">Eveniet, reiciendis, veniam</h3>
+							<p>Rem nulla molestiae inventore quibusdam repudiandae doloremque eveniet ullam, qui autem possimus saepe laudantium numquam sapiente vel. Repudiandae, nihil tempore. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+						</section>
+					</div>
+					<footer>
+						<ul class="actions">
+							<li>
+								<a href="#" class="button alt big">Learn More</a>
+							</li>
+						</ul>
+					</footer>
+				</div>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<div class="row">
+						<section class="4u 6u(medium) 12u$(small)">
+							<h3>Lorem ipsum</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, cumque!</p>
+							<ul class="alt">
+								<li><a href="#">Lorem ipsum dolor sit amet.</a></li>
+								<li><a href="#">Quod adipisci perferendis et itaque.</a></li>
+								<li><a href="#">Itaque eveniet ullam, veritatis reiciendis?</a></li>
+								<li><a href="#">Accusantium repellat accusamus a, soluta.</a></li>
+							</ul>
+						</section>
+						<section class="4u 6u$(medium) 12u$(small)">
+							<h3>Nostrum, repellat!</h3>
+							<p>Tenetur voluptate exercitationem eius tempora! Obcaecati suscipit, soluta earum blanditiis.</p>
+							<ul class="alt">
+								<li><a href="#">Lorem ipsum dolor sit amet.</a></li>
+								<li><a href="#">Id inventore, qui necessitatibus sunt.</a></li>
+								<li><a href="#">Deleniti eum odit nostrum eveniet.</a></li>
+								<li><a href="#">Illum consectetur quibusdam eos corporis.</a></li>
+							</ul>
+						</section>
+						<section class="4u$ 12u$(medium) 12u$(small)">
+							<h3>Contact Us</h3>
+							<ul class="icons">
+								<li><a href="#" class="icon rounded fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon rounded fa-facebook"><span class="label">Facebook</span></a></li>
+								<li><a href="#" class="icon rounded fa-pinterest"><span class="label">Pinterest</span></a></li>
+								<li><a href="#" class="icon rounded fa-google-plus"><span class="label">Google+</span></a></li>
+								<li><a href="#" class="icon rounded fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							<ul class="tabular">
+								<li>
+									<h3>Address</h3>
+									1234 Somewhere Road<br>
+									Nashville, TN 00000
+								</li>
+								<li>
+									<h3>Mail</h3>
+									<a href="#">someone@untitled.tld</a>
+								</li>
+								<li>
+									<h3>Phone</h3>
+									(000) 000-0000
+								</li>
+							</ul>
+						</section>
+					</div>
+					<ul class="copyright">
+						<li>&copy; Untitled. All rights reserved.</li>
+						<li>Design: <a href="http://templated.co">TEMPLATED</a></li>
+						<li>Images: <a href="http://unsplash.com">Unsplash</a></li>
+					</ul>
+				</div>
+			</footer>
+
+	</body>
+</html>
